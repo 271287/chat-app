@@ -22,7 +22,10 @@ io.on('connection', (socket) => {
   socket.on('join', (userName) => {
     console.log('New user ' + socket.id);
     users.push({ author: userName, id: socket.id });
-    socket.broadcast.emit('message', { author: 'Chat bot', content: `${userName} has joined the converstaion!`});
+    socket.broadcast.emit('message', { 
+      author: 'Chat bot', 
+      content: `${userName} has joined the conversation!`
+    });
   });
   socket.on('message', (message) => {
     console.log('Oh, I\'ve got something from ' + socket.id);
@@ -31,8 +34,11 @@ io.on('connection', (socket) => {
   });
   socket.on('disconnect', () => {
     const user = users.filter(user => (user.id !== socket.id));
-    socket.broadcast.emit('message', { author: 'Chat bot', content: `${user.userName} has left the conversation.`});
-    //console.log('users' + user);
+    socket.broadcast.emit('message', {
+       author: 'Chat bot', 
+       content: `${user.userName} has left the conversation.`
+      });
+    console.log('users' + user);
     console.log('Oh, socket ' + socket.id + ' has left') });
     console.log('I\'ve added a listener on message event \n');
 });

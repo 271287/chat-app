@@ -1,33 +1,33 @@
-const loginForm = document.querySelector('welcome-form');
-const messagesSection = document.querySelector('messages-section');
-const messagesList = document.querySelector('messages-list');
-const addMessageForm = document.querySelector('add-messages-form');
-const userNameInput = document.querySelector('username');
-const messageContentInput = document.querySelector('message-content');
+const loginForm = document.getElementById('welcome-form');
+const messagesSection = document.getElementById('messages-section');
+const messagesList = document.getElementById('messages-list');
+const addMessageForm = document.getElementById('add-messages-form');
+const userNameInput = document.getElementById('username');
+const messageContentInput = document.getElementById('message-content');
 
 let userName;
 
 const socket = io();
 
 socket.on('message', ({ author, content }) => addMessage(author, content));
-loginForm.addEventListener('submit', login);
-addMessageForm.addEventListener('submit', sendMessage);
+socket.on('join', (user) => addMessage(user));
 
 function login(e) {
   e.preventDefault();
-  if(userNameInput.value === '') {
-    alert('Please enter your name.');
+  let user = userNameInput.value;
+  if (!user.length === '') {
+    alert("Please write your name!");
   } else {
-    userName = userNameInput.value;
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
     socket.emit('join', userName);
   }
 };
+loginForm.addEventListener('submit', login);
 
 function sendMessage(e) {
   e.preventDefault();
-  if(messageContentInput.value === '') {
+  if (messageContentInput.value === '') {
     alert('Please type your message!');
   } else {
     addMessage(userName, messageContentInput.value);
@@ -35,14 +35,15 @@ function sendMessage(e) {
     messageContentInput.value = '';
   }
 };
+addMessageForm.addEventListener('submit', sendMessage);
 
 function addMessage(author, content) {
   const message = document.createElement('li');
   message.classList.add('message');
   message.classList.add('message--received');
-  if(author === userName) message.classList.add('message--self');
+  if (author === userName) message.classList.add('message--self');
   message.innerHTML = `
-    <h3 class="message__author">${userName === author ? 'You' : author }</h3>
+    <h3 class="message__author">${userName === author ? 'You' : author}</h3>
     <div class="message__content">
       ${content}
     </div>
