@@ -15,15 +15,15 @@ socket.on('join', (user) => addMessage(user));
 function login(e) {
   e.preventDefault();
   let user = userNameInput.value;
-  if (!user.length === '') {
+  if (!user.length === '0') { 
     alert("Please write your name!");
   } else {
+    userName = user;
     loginForm.classList.remove('show');
     messagesSection.classList.add('show');
-    socket.emit('join', userName);
+    socket.emit('join', user);
   }
 };
-loginForm.addEventListener('submit', login);
 
 function sendMessage(e) {
   e.preventDefault();
@@ -35,7 +35,6 @@ function sendMessage(e) {
     messageContentInput.value = '';
   }
 };
-addMessageForm.addEventListener('submit', sendMessage);
 
 function addMessage(author, content) {
   const message = document.createElement('li');
@@ -50,3 +49,6 @@ function addMessage(author, content) {
   `;
   messagesList.appendChild(message);
 }
+
+loginForm.addEventListener('submit', login);
+addMessageForm.addEventListener('submit', sendMessage);
