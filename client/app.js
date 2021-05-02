@@ -15,7 +15,7 @@ socket.on('join', (user) => addMessage(user));
 function login(e) {
   e.preventDefault();
   let user = userNameInput.value;
-  if (!user.length === 0) { 
+  if (user.length === 0) { 
     alert("Please write your name!");
   } else {
     userName = user;
